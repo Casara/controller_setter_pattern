@@ -40,16 +40,16 @@ class ArticlesController < ApplicationController
     if @article.save
       redirect_to @article
     else
-      render 'new'
+      render :new
     end
   end
   
-  # PUT/PATCH /articles/:id
+  # PATCH/PUT /articles/:id
   def update
     if @article.update(article_params)
       redirect_to @article
     else
-      render 'edit'
+      render :edit
     end
   end
   
@@ -70,19 +70,17 @@ class ArticlesController < ApplicationController
 end
 
 class CommentsController < ApplicationController
-  # GET /articles/:article_id/comments index
-  # GET /articles/:article_id/comments
-  # GET /articles/:article_id/comments
-  # GET /articles/:article_id/comments
+  before_action :set_article
+  before_action :set_comment, except: [:index, :new, :create]
 
-
+  # POST /articles/:article_id/comments
   def create
     @comment = @article.comments.create(comment_params)
     redirect_to article_path(@article)
   end
 
+  # DELETE /articles/:article_id/comments/:id
   def destroy
-    @comment = @article.comments.find(params[:id])
     @comment.destroy
     redirect_to article_path(@article)
   end
@@ -93,7 +91,7 @@ class CommentsController < ApplicationController
     end
 
     def set_comment
-      @comment = Comment.find(params[:id])
+      @comment = @article.comments.find(params[:id])
     end
 
     def comment_params
@@ -117,6 +115,36 @@ class ArticlesController < ApplicationController
       params.require(:article).permit(:title, :text)
     end
 end
+
+class CommentsController < ApplicationController
+  set :article
+  set :comment, ancestor: :article, except: [:index, :new, :create]
+
+  # POST /articles/:article_id/comments
+  def create
+    @comment = @article.comments.create(comment_params)
+    redirect_to article_path(@article)
+  end
+
+  # DELETE /articles/:article_id/comments/:id
+  def destroy
+    @comment.destroy
+    redirect_to article_path(@article)
+  end
+
+  private
+    def set_article
+      @article = Article.find(params[:article_id])
+    end
+
+    def set_comment
+      @comment = @article.comments.find(params[:id])
+    end
+
+    def comment_params
+      params.require(:comment).permit(:commenter, :body)
+    end
+end
 ```
 
 In file `app/views/articles/show.html.erb`:
@@ -131,4 +159,52 @@ In file `app/views/articles/show.html.erb`:
   <strong>Text:</strong>
   <%= @article.text %>
 </p>
+```
+
+In file `app/views/articles/show.html.erb`:
+
+```erb
+<p>
+  <strong>Title:</strong>
+  <%= @article.title %>
+</p>
+
+<p>
+  <strong>Text:</strong>
+  <%= @article.text %>
+</p>
+
+<h2>Comments</h2>
+<%= render @article.comments %>
+
+<h2>Add a comment:</h2>
+<%= render 'comments/form' %>
+
+<%= link_to 'Edit', edit_article_path(@article) %> |
+<%= link_to 'Back', articles_path %>
+```
+
+## Further configuration
+
+**Specify the model name:**
+
+```ruby
+set :ebook, model: Book
+# @ebook = Book.find(params[:id])
+```
+
+**Specify the parameters key to use to fetch the object:**
+```ruby
+set :ebook, model: Book, finder_params: :isbn
+# @ebook = Book.find_by_isbn(params[:isbn])
+
+set :ebook, model: Book, finder_params: [:author, :title]
+# @ebook = Book.find_by_author_and_title(params[:author], params[:title])
+```
+
+**Specify the scope:**
+
+```ruby
+set :user, scope: :active, finder_params: :email
+# @user = User.active.find_by_email(params[:email])
 ```
