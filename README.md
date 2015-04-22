@@ -123,14 +123,6 @@ class CommentsController < ApplicationController
   # actions methods ...
 
   private
-    def set_article
-      @article = Article.find(params[:article_id])
-    end
-
-    def set_comment
-      @comment = @article.comments.find(params[:id])
-    end
-
     def comment_params
       params.require(:comment).permit(:commenter, :body)
     end
