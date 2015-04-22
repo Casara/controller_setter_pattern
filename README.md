@@ -100,7 +100,7 @@ class CommentsController < ApplicationController
 end
 ```
 
-With setter pattern:
+After setter pattern:
 
 ```ruby
 class ArticlesController < ApplicationController
@@ -109,7 +109,7 @@ class ArticlesController < ApplicationController
   # actions methods ...
 
   private
-    # setter method not more necessary
+    # setter method no more necessary
 
     def article_params
       params.require(:article).permit(:title, :text)
@@ -120,17 +120,7 @@ class CommentsController < ApplicationController
   set :article
   set :comment, ancestor: :article, except: [:index, :new, :create]
 
-  # POST /articles/:article_id/comments
-  def create
-    @comment = @article.comments.create(comment_params)
-    redirect_to article_path(@article)
-  end
-
-  # DELETE /articles/:article_id/comments/:id
-  def destroy
-    @comment.destroy
-    redirect_to article_path(@article)
-  end
+  # actions methods ...
 
   private
     def set_article
@@ -145,20 +135,6 @@ class CommentsController < ApplicationController
       params.require(:comment).permit(:commenter, :body)
     end
 end
-```
-
-In file `app/views/articles/show.html.erb`:
-
-```erb
-<p>
-  <strong>Title:</strong>
-  <%= @article.title %>
-</p>
- 
-<p>
-  <strong>Text:</strong>
-  <%= @article.text %>
-</p>
 ```
 
 In file `app/views/articles/show.html.erb`:
