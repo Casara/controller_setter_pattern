@@ -4,6 +4,7 @@
 [![Code Climate](https://codeclimate.com/github/Casara/controller_setter_pattern.svg)](https://codeclimate.com/github/Casara/controller_setter_pattern)
 [![Test Coverage](https://codeclimate.com/github/Casara/controller_setter_pattern/badges/coverage.svg)](https://codeclimate.com/github/Casara/controller_setter_pattern/coverage)
 [![Gem Version](https://badge.fury.io/rb/controller_setter_pattern.svg)](http://badge.fury.io/rb/controller_setter_pattern)
+[![Dependency Status](https://gemnasium.com/Casara/controller_setter_pattern.svg)](https://gemnasium.com/Casara/controller_setter_pattern)
 
 Pattern for assign instance variables in controllers for use in views, etc.
 
