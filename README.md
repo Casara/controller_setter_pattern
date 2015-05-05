@@ -50,7 +50,7 @@ class ArticlesController < ApplicationController
       render :new
     end
   end
-  
+
   # PATCH/PUT /articles/:id
   def update
     if @article.update(article_params)
@@ -59,7 +59,7 @@ class ArticlesController < ApplicationController
       render :edit
     end
   end
-  
+
   # DELETE /articles/:id
   def destroy
     @article.destroy
