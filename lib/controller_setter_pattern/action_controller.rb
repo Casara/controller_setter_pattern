@@ -42,22 +42,21 @@ module ControllerSetterPattern
     private
       def _get_resource(setter, model, ancestor)
         if !ancestor.nil?
-          if instance_variable_defined?("@#{ancestor}")
-            resource = instance_variable_get("@#{ancestor}")
-            model_class = resource.class
-          else
-            model_class = ancestor.to_s.camelize.constantize
-            resource = model_class.find(params["#{model_class.name.underscore}_id".to_sym])
-          end
-          reflection_name = (model || setter).to_s.underscore.pluralize.to_sym
-          resource = resource.send(reflection_name) if resource.respond_to?(reflection_name)
-        elsif !model.nil? && model.descends_from_active_record?
-          model_class = model
-        elsif
-          model_class = setter.to_s.camelize.constantize
+          _get_ancestor_resource(setter, model, ancestor)
+        else
+          (!model.nil? && model.descends_from_active_record?) ? model : setter.to_s.camelize.constantize
         end
+      end
 
-        resource || model_class
+      def _get_ancestor_resource(setter, model, ancestor)
+        if instance_variable_defined?("@#{ancestor}")
+          resource = instance_variable_get("@#{ancestor}")
+        else
+          model_class = ancestor.to_s.camelize.constantize
+          resource = model_class.find(params["#{model_class.name.underscore}_id".to_sym])
+        end
+        reflection_name = (model || setter).to_s.underscore.pluralize.to_sym
+        resource = resource.send(reflection_name) if resource.respond_to?(reflection_name)
       end
 
       def _get_values_for_finder_params(setter, finder_params)
