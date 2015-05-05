@@ -1,7 +1,7 @@
 # controller_setter_pattern
 
-[![Travis-CI](https://travis-ci.org/Casara/controller_setter_pattern.png)](https://travis-ci.org/Casara/controller_setter_pattern)
-[![CodeClimate](https://codeclimate.com/github/Casara/controller_setter_pattern.png)](https://codeclimate.com/github/Casara/controller_setter_pattern)
+[![Build Status](https://travis-ci.org/Casara/controller_setter_pattern.svg)](https://travis-ci.org/Casara/controller_setter_pattern)
+[![Code Climate](https://codeclimate.com/github/Casara/controller_setter_pattern.svg)](https://codeclimate.com/github/Casara/controller_setter_pattern)
 [![Gem Version](https://badge.fury.io/rb/controller_setter_pattern.svg)](http://badge.fury.io/rb/controller_setter_pattern)
 
 Pattern for assign instance variables in controllers for use in views, etc.
