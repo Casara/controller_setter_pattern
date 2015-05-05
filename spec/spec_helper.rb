@@ -5,7 +5,13 @@ require 'database_cleaner'
 require 'logger'
 require 'faker'
 require 'factory_girl_rails'
+require 'codeclimate-test-reporter'
 require 'controller_setter_pattern'
+
+formatters = [SimpleCov::Formatter::HTMLFormatter]
+formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[*formatters]
+SimpleCov.start 'rails'
 
 module Rails
   class App

@@ -3,4 +3,7 @@ rvm:
   - 2.2.2
 gemfile:
   - Gemfile
+addons:
+  code_climate:
+    repo_token: c1f8ba0adfcc8f55bfa8940710b9899fdfed0581fdc6d9537a34a5e42ed8dfe7
 script: "bundle exec rake spec"
