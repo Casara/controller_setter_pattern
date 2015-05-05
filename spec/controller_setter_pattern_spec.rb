@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'rspec/rails'
 
 describe ControllerSetterPattern do
   it 'is a model' do

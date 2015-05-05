@@ -1,3 +1,4 @@
+require 'action_controller/railtie'
 require 'action_controller'
 require 'active_model'
 require 'active_record'
@@ -5,6 +6,8 @@ require 'database_cleaner'
 require 'logger'
 require 'faker'
 require 'factory_girl_rails'
+require 'rspec/rails'
+require 'rails'
 require 'codeclimate-test-reporter'
 
 formatters = [SimpleCov::Formatter::HTMLFormatter]
@@ -15,11 +18,14 @@ SimpleCov.start
 require 'controller_setter_pattern'
 
 module Rails
-  class App
+  class App < Rails::Application
     def env_config; {} end
+
     def routes
       @routes ||= ActionDispatch::Routing::RouteSet.new
     end
+
+    config.root = File.expand_path('../../', __FILE__)
   end
 
   def self.application
