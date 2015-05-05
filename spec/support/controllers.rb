@@ -13,6 +13,7 @@ end
 class AccountController < ActionController::Base
   set :account, model: User, finder_params: :email, only: :resend_password
   set :account, model: User, scope: :active, finder_params: :username, only: :profile
+  set :admin_account, model: User, scope: [:active, :administrator], finder_params: :username, only: :admin_profile
 
   def resend_password
     render text: "An email containing the new password was sent to your inbox (#{@account.email})."
@@ -20,6 +21,10 @@ class AccountController < ActionController::Base
 
   def profile
     render json: @account
+  end
+
+  def admin_profile
+    render json: @admin_account
   end
 end
 

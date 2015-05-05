@@ -39,9 +39,13 @@ describe AccountController, type: :controller do
     end
 
     it 'finds an instance with scope' do
-      user.active!
       get :profile, username: user.username
       should be_a(User)
+    end
+
+    it 'finds the instance with scopes' do
+      get :admin_profile, username: user.username
+      expect(assigns(:admin_account)).to be_a(User)
     end
   end
 end

@@ -3,6 +3,14 @@ FactoryGirl.define do
     name     { Faker::Name.name }
     username { Faker::Internet.user_name(name) }
     email    { Faker::Internet.safe_email(username) }
+    admin    false
+
+    after(:create) do |user, evaluator|
+      if evaluator.id == 1
+        user.admin = true
+        user.active!
+      end
+    end
   end
 
   factory :customer do

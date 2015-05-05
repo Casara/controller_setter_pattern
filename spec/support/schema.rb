@@ -6,6 +6,7 @@ ActiveRecord::Schema.define do
     t.string :name
     t.string :username, unique: true
     t.string :email, unique: true
+    t.boolean :admin, default: false
     t.timestamps null: false
   end
 

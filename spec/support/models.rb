@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, case_sensitive: false
 
   before_save { |record| record.status = 'pending' if record.passive? }
+
+  scope :administrator, -> { where(admin: true) }
 end
 
 class Customer < ActiveRecord::Base
