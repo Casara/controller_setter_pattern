@@ -169,6 +169,7 @@ set :ebook, model: Book
 ```
 
 **Specify the parameters key to use to fetch the object:**
+
 ```ruby
 set :ebook, model: Book, finder_params: :isbn
 # @ebook = Book.find_by_isbn(params[:isbn])
