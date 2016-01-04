@@ -22,4 +22,13 @@ FactoryGirl.define do
     customer
     order_date { Faker::Date.forward(90) }
   end
+
+  factory :supplier do
+    name { Faker::Company.name }
+    account { FactoryGirl.create(:account) }
+  end
+
+  factory :account do
+    account_number { Faker::Number.number(10) }
+  end
 end

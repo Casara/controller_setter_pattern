@@ -19,53 +19,71 @@ module ControllerSetterPattern
       end
 
       private
-        def _normalize_finder_params(finder_params)
-          finder_params = [finder_params] unless finder_params.is_a?(Array)
-          finder_params = finder_params.compact.uniq
-          finder_params.clear if finder_params.one? && finder_params.join.eql?('id')
-          finder_params
-        end
 
-        def _insert_setters(setters, options, callback_options)
-          setters.each do |setter|
-            before_action callback_options do |controller|
-              resource = _get_resource(setter, options[:model], options[:ancestor])
+      def _normalize_finder_params(finder_params)
+        finder_params = [finder_params] unless finder_params.is_a?(Array)
+        finder_params = finder_params.compact.uniq
+        finder_params.clear if finder_params.one? && finder_params.join.eql?('id')
+        finder_params
+      end
+
+      def _insert_setters(setters, options, callback_options)
+        setters.each do |setter|
+          before_action callback_options do |controller|
+            resource = _get_resource(setter, options[:model], options[:ancestor])
+            if _is_class_model_or_association_method?(resource)
               Array(options[:scope]).each { |s| resource = resource.send(s) } unless options[:scope].nil?
               values_for_find = _get_values_for_finder_params(setter, options[:finder_params])
               resource = resource.send(options[:finder_method], *values_for_find)
-              controller.instance_variable_set("@#{setter}".to_sym, resource)
             end
+            controller.instance_variable_set("@#{setter}".to_sym, resource)
           end
         end
+      end
     end
 
     private
-      def _get_resource(setter, model, ancestor)
-        if !ancestor.nil?
-          _get_ancestor_resource(setter, model, ancestor)
-        else
-          (!model.nil? && model.descends_from_active_record?) ? model : setter.to_s.camelize.constantize
-        end
+
+    def _get_resource(setter, model, ancestor)
+      if !ancestor.nil?
+        _get_ancestor_resource(setter, model, ancestor)
+      else
+        (!model.nil? && model.descends_from_active_record?) ? model : setter.to_s.camelize.constantize
+      end
+    end
+
+    def _get_ancestor_resource(setter, model, ancestor)
+      if instance_variable_defined?("@#{ancestor}")
+        resource = instance_variable_get("@#{ancestor}")
+      else
+        model_class = ancestor.to_s.camelize.constantize
+        resource = model_class.find(params["#{model_class.name.underscore}_id".to_sym])
       end
 
-      def _get_ancestor_resource(setter, model, ancestor)
-        if instance_variable_defined?("@#{ancestor}")
-          resource = instance_variable_get("@#{ancestor}")
-        else
-          model_class = ancestor.to_s.camelize.constantize
-          resource = model_class.find(params["#{model_class.name.underscore}_id".to_sym])
-        end
-        reflection_name = (model || setter).to_s.underscore.pluralize.to_sym
-        resource = resource.send(reflection_name) if resource.respond_to?(reflection_name)
+      reflection = _get_reflection(resource.class, model || setter)
+      unless reflection.nil?
+        reflection_method = reflection.options[:as] || reflection.name
+        resource = resource.send(reflection_method) if resource.respond_to?(reflection_method)
       end
+    end
 
-      def _get_values_for_finder_params(setter, finder_params)
-        if finder_params.empty?
-          values_for_find = params["#{setter}_id".to_sym] || params[:id]
-        else
-          defaults = finder_params.inject({}) { |h, v| h.merge(v.to_s => nil) }
-          values_for_find = defaults.merge(params.permit(finder_params)).values
-        end
+    def _get_reflection(klass, assoc_class)
+      singular_name = assoc_class.to_s.underscore.singularize.to_sym
+      plural_name = assoc_class.to_s.underscore.pluralize.to_sym
+      klass.reflect_on_association(singular_name) || klass.reflect_on_association(plural_name)
+    end
+
+    def _is_class_model_or_association_method?(resource)
+      resource.is_a?(Class) || resource.class.ancestors.include?(ActiveRecord::Associations::CollectionProxy)
+    end
+
+    def _get_values_for_finder_params(setter, finder_params)
+      if finder_params.empty?
+        values_for_find = params["#{setter}_id".to_sym] || params[:id]
+      else
+        defaults = finder_params.inject({}) { |h, v| h.merge(v.to_s => nil) }
+        values_for_find = defaults.merge(params.permit(finder_params)).values
       end
+    end
   end
 end

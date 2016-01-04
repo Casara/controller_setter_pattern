@@ -69,3 +69,14 @@ describe OrdersController, type: :controller do
     expect(assigns(:order)).to be_a(Order)
   end
 end
+
+describe AccountsController, type: :controller do
+  let(:supplier) { FactoryGirl.create(:supplier) }
+
+  context 'with ancestor' do
+    it 'finds an instance' do
+      get :show, supplier_id: supplier.id, id: supplier.account.id
+      expect(assigns(:account)).to be_a(Account)
+    end
+  end
+end

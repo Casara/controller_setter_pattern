@@ -46,3 +46,12 @@ class OrdersController < ActionController::Base
     render json: @order
   end
 end
+
+class AccountsController < ActionController::Base
+  set :supplier
+  set :account, ancestor: :supplier
+
+  def show
+    render json: @account
+  end
+end

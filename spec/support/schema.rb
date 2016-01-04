@@ -20,4 +20,15 @@ ActiveRecord::Schema.define do
     t.datetime :order_date
     t.timestamps null: false
   end
+
+  create_table :suppliers, force: true do |t|
+    t.string :name
+    t.timestamps null: false
+  end
+
+  create_table :accounts, force: true do |t|
+    t.belongs_to :supplier, index: true
+    t.string :account_number
+    t.timestamps null: false
+  end
 end

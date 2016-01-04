@@ -25,3 +25,11 @@ end
 class Order < ActiveRecord::Base
   belongs_to :customer
 end
+
+class Supplier < ActiveRecord::Base
+  has_one :account
+end
+
+class Account < ActiveRecord::Base
+  belongs_to :supplier
+end

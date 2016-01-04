@@ -17,13 +17,13 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ['lib']
 
-  s.add_development_dependency 'rspec', '~> 3.2.0'
-  s.add_development_dependency 'rspec-rails', '~> 3.2.1'
+  s.add_development_dependency 'rspec', '~> 3.4.0'
+  s.add_development_dependency 'rspec-rails', '~> 3.4.0'
   s.add_development_dependency 'sqlite3'
-  s.add_development_dependency 'database_cleaner', '~> 1.4.1'
+  s.add_development_dependency 'database_cleaner', '~> 1.5.1'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'actionpack', '~> 4.2.1'
-  s.add_development_dependency 'activesupport', '~> 4.2.1'
+  s.add_development_dependency 'actionpack', '~> 4.2.5'
+  s.add_development_dependency 'activesupport', '~> 4.2.5'
   s.add_development_dependency 'factory_girl_rails', '~> 4.5.0'
-  s.add_development_dependency 'faker', '~> 1.4.3'
+  s.add_development_dependency 'faker', '~> 1.6.1'
 end

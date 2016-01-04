@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   get 'customers/:customer_id/orders/:id' => 'orders#show'
   get 'customers/:customer_id/orders/:id/edit' => 'orders#edit', as: :edit
   get 'order_by_customer_date' => 'orders#order_by_customer_date'
+
+  get 'suppliers/:supplier_id/accounts/:id' => 'accounts#show'
 end
