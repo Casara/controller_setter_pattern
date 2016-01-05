@@ -31,11 +31,7 @@ module ControllerSetterPattern
         setters.each do |setter|
           before_action callback_options do |controller|
             resource = _get_resource(setter, options[:model], options[:ancestor])
-            if _is_class_model_or_association_method?(resource)
-              Array(options[:scope]).each { |s| resource = resource.send(s) } unless options[:scope].nil?
-              values_for_find = _get_values_for_finder_params(setter, options[:finder_params])
-              resource = resource.send(options[:finder_method], *values_for_find)
-            end
+            resource = _get_resource_by_finder(resource, setter, options) if _is_class_model_or_association_method?(resource)
             controller.instance_variable_set("@#{setter}".to_sym, resource)
           end
         end
@@ -43,6 +39,12 @@ module ControllerSetterPattern
     end
 
     private
+
+    def _get_resource_by_finder(resource, setter, options)
+      Array(options[:scope]).each { |s| resource = resource.send(s) } unless options[:scope].nil?
+      values_for_find = _get_values_for_finder_params(setter, options[:finder_params])
+      resource.send(options[:finder_method], *values_for_find)
+    end
 
     def _get_resource(setter, model, ancestor)
       if !ancestor.nil?
@@ -59,18 +61,15 @@ module ControllerSetterPattern
         model_class = ancestor.to_s.camelize.constantize
         resource = model_class.find(params["#{model_class.name.underscore}_id".to_sym])
       end
-
-      reflection = _get_reflection(resource.class, model || setter)
-      unless reflection.nil?
-        reflection_method = reflection.options[:as] || reflection.name
-        resource = resource.send(reflection_method) if resource.respond_to?(reflection_method)
-      end
+      reflection_method = _get_reflection_method(resource.class, model || setter)
+      resource.send(reflection_method) if resource.respond_to?(reflection_method)
     end
 
-    def _get_reflection(klass, assoc_class)
+    def _get_reflection_method(klass, assoc_class)
       singular_name = assoc_class.to_s.underscore.singularize.to_sym
       plural_name = assoc_class.to_s.underscore.pluralize.to_sym
-      klass.reflect_on_association(singular_name) || klass.reflect_on_association(plural_name)
+      reflection = klass.reflect_on_association(singular_name) || klass.reflect_on_association(plural_name)
+      (reflection.options[:as] || reflection.name) unless reflection.nil?
     end
 
     def _is_class_model_or_association_method?(resource)
