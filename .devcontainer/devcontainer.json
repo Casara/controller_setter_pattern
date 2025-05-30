@@ -4,26 +4,88 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "rebornix.Ruby",
-        "Shopify.ruby-lsp",
+        // Ruby & Gems
+        "shopify.ruby-extensions-pack", // Includes ruby-lsp, RuboCop, etc.
+        "misogi.ruby-rubocop",          // Explicit if preferred over pack's version or for specific config
+        "connorshea.vscode-ruby-test-adapter",
+        "ndemianc.ruby-gemfile",
+        "dewski.simplecov",
+
+        // Version Control & GitHub
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "GitHub.vscode-pull-request-github",
+        "GitHub.vscode-github-actions",
+
+        // AI & Copilot
+        "GitHub.copilot",
+        "github.copilot-chat",
+
+        // General Editing & UI Enhancements
         "EditorConfig.EditorConfig",
         "yzhang.markdown-all-in-one",
         "redhat.vscode-yaml",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode", // For non-Ruby/non-EditorConfig files
+        "nefrob.vscode-just-syntax",
+        "bierner.markdown-emoji",
+        "bierner.emojisense",
+
+        // Themes & Icons
+        "akamud.vscode-theme-onedark",
+        "emmanuelbeziat.vscode-great-icons",
+        "gael-lopes-da-silva.spaced", // May be a theme or UI tweak
+
+        // Other Tools
+        "ms-azuretools.vscode-docker"
       ],
       "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash",
+        "workbench.iconTheme": "vscode-great-icons",
+        "workbench.colorTheme": "Atom One Dark",
+        "editor.defaultFormatter": "EditorConfig.EditorConfig",
+        "editor.fontFamily": "'FiraCode Nerd Font', 'Hack Nerd Font'",
+        "editor.fontLigatures": true,
+        "editor.formatOnPaste": true,
+        "editor.formatOnSaveMode": "file",
+        "editor.formatOnSave": true,
+        "editor.minimap.enabled": true,
+        "editor.minimap.maxColumn": 120,
+        "editor.minimap.side": "right",
+        "editor.insertSpaces": true,
+        "editor.rulers": [80, 100, 120],
+        "editor.tabSize": 2,
+        "files.encoding": "utf8",
+        "files.eol": "\n",
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "git.useEditorAsCommitInput": true,
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "[dockerfile]": {
+          "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+        },
         "[ruby]": {
-          "editor.defaultFormatter": "Shopify.ruby-lsp",
-          "editor.formatOnSave": true
+          "editor.defaultFormatter": "Shopify.ruby-lsp"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "redhat.vscode-yaml"
         }
       }
     }
   },
   "features": {
-    // If a standard feature for 'just' becomes available, it could be listed here.
-    // For example: "ghcr.io/devcontainers-contrib/features/just:1": {}
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "version": "latest",
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": false,
+      "upgradePackages": true
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached"
+  ],
   // Using onCreateCommand to ensure 'just' is available when the container is ready.
   // This command runs inside the container.
   "onCreateCommand": "sudo apt-get update && sudo apt-get install -y curl && sudo curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin",
