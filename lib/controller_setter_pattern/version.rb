@@ -1,6 +1,8 @@
-module ControllerSetterPattern #:nodoc:
+# frozen_string_literal: true
+
+module ControllerSetterPattern # :nodoc:
   MAJOR = 0
   MINOR = 1
   PATCH = 2
-  VERSION = "#{MAJOR}.#{MINOR}.#{PATCH}"
+  VERSION = "#{MAJOR}.#{MINOR}.#{PATCH}".freeze
 end

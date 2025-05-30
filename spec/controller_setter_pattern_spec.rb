@@ -1,45 +1,47 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe ControllerSetterPattern do
   it 'is a model' do
-    expect(ControllerSetterPattern).to be_a(Module)
+    expect(described_class).to be_a(Module)
   end
 end
 
 describe UsersController, type: :controller do
-  before { FactoryBot.create_list(:user, 3) }
+  subject { assigns(:user) }
+
+  before { create_list(:user, 3) }
 
   let(:user) { User.first }
 
-  subject { assigns(:user) }
-
   it 'finds the instance with params[:id]' do
     get :show, params: { id: user.id }
-    should be_a(User)
+    expect(subject).to be_a(User)
   end
 
   it 'finds the instance with params[:model_id]' do
     get :show, params: { user_id: user.id }
-    should be_a(User)
+    expect(subject).to be_a(User)
   end
 end
 
 describe AccountController, type: :controller do
-  before { FactoryBot.create_list(:user, 3) }
+  subject { assigns(:account) }
+
+  before { create_list(:user, 3) }
 
   let(:user) { User.first }
-
-  subject { assigns(:account) }
 
   context 'with a model name and a parameter key' do
     it 'finds an instance' do
       get :resend_password, params: { email: user.email }
-      should be_a(User)
+      expect(subject).to be_a(User)
     end
 
     it 'finds an instance with scope' do
       get :profile, params: { username: user.username }
-      should be_a(User)
+      expect(subject).to be_a(User)
     end
 
     it 'finds the instance with scopes' do
@@ -50,7 +52,7 @@ describe AccountController, type: :controller do
 end
 
 describe OrdersController, type: :controller do
-  let(:customer) { FactoryBot.create(:customer) }
+  let(:customer) { create(:customer) }
 
   context 'with ancestor' do
     it 'finds an instance' do
@@ -65,13 +67,14 @@ describe OrdersController, type: :controller do
   end
 
   it 'finds the instance with params keys' do
-    get :order_by_customer_date, params: { customer_id: customer.id, order_date: customer.orders.last.order_date.to_date }, xhr: true
+    get :order_by_customer_date,
+        params: { customer_id: customer.id, order_date: customer.orders.last.order_date.to_date }, xhr: true
     expect(assigns(:order)).to be_a(Order)
   end
 end
 
 describe AccountsController, type: :controller do
-  let(:supplier) { FactoryBot.create(:supplier) }
+  let(:supplier) { create(:supplier) }
 
   context 'with ancestor' do
     it 'finds an instance' do

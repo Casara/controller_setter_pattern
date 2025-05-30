@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'simplecov'
 require 'simplecov-lcov'
 
@@ -22,23 +24,23 @@ require 'faker'
 require 'factory_bot_rails'
 require 'rspec/rails'
 require 'rails'
-# Note: controller_setter_pattern should be required AFTER SimpleCov.start
+# NOTE: controller_setter_pattern should be required AFTER SimpleCov.start
 # to ensure its loading is tracked for coverage.
 require 'controller_setter_pattern'
 
 module Rails
   class App < Rails::Application
-    def env_config; {} end
+    def env_config = {}
 
     def routes
       @routes ||= ActionDispatch::Routing::RouteSet.new
     end
 
-    config.root = File.expand_path('../../', __FILE__)
+    config.root = File.expand_path('..', __dir__)
   end
 
   def self.application
-    @app ||= App.new
+    @application ||= App.new
   end
 end
 
@@ -54,22 +56,20 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
-    begin
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.clean_with(:truncation)
-      DatabaseCleaner.start
-      FactoryBot.find_definitions
-      FactoryBot.lint
-    ensure
-      DatabaseCleaner.clean
-    end
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.start
+    FactoryBot.find_definitions
+    FactoryBot.lint
+  ensure
+    DatabaseCleaner.clean
   end
 
-  config.before(:each) do
+  config.before do
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  config.after do
     DatabaseCleaner.clean
   end
 end

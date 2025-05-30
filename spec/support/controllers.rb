@@ -1,4 +1,6 @@
-load File.dirname(__FILE__) + '/routes.rb'
+# frozen_string_literal: true
+
+load "#{File.dirname(__FILE__)}/routes.rb"
 
 ActionController::Base.include Rails.application.routes.url_helpers
 
@@ -13,7 +15,7 @@ end
 class AccountController < ActionController::Base
   set :account, model: User, finder_params: :email, only: :resend_password
   set :account, model: User, scope: :active, finder_params: :username, only: :profile
-  set :admin_account, model: User, scope: [:active, :administrator], finder_params: :username, only: :admin_profile
+  set :admin_account, model: User, scope: %i[active administrator], finder_params: :username, only: :admin_profile
 
   def resend_password
     render plain: "An email containing the new password was sent to your inbox (#{@account.email})."
@@ -32,7 +34,7 @@ class OrdersController < ActionController::Base
   set :customer, only: :show
   set :order, ancestor: :customer, only: :show
   set :other_order, model: Order, ancestor: :customer, only: :edit
-  set :order, finder_params: [:customer_id, :order_date], only: :order_by_customer_date
+  set :order, finder_params: %i[customer_id order_date], only: :order_by_customer_date
 
   def show
     render json: @order

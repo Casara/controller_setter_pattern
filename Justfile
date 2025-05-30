@@ -15,9 +15,13 @@ test:
 console:
     bundle exec irb
 
-# Placeholder for linter (e.g., RuboCop)
+# Run RuboCop to check for offenses
 lint:
-    echo "Linter not yet configured. Add RuboCop or other linter."
+    bundle exec rubocop
+
+# Auto-correct offenses with RuboCop
+format:
+    bundle exec rubocop -A
 
 # List available tasks (simple version)
 list:
@@ -25,5 +29,6 @@ list:
     @echo "  setup    - Install dependencies"
     @echo "  test     - Run RSpec tests"
     @echo "  console  - Start IRB console"
-    @echo "  lint     - Run linter (not yet configured)"
+    @echo "  lint     - Run RuboCop to check for offenses"
+    @echo "  format   - Auto-correct offenses with RuboCop"
     @echo "  list     - List available tasks"

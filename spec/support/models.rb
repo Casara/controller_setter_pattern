@@ -1,4 +1,6 @@
-load File.dirname(__FILE__) + '/schema.rb'
+# frozen_string_literal: true
+
+load "#{File.dirname(__FILE__)}/schema.rb"
 
 class User < ActiveRecord::Base
   has_many :social_networks

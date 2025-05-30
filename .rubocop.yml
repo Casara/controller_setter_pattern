@@ -1,0 +1,41 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.4
+  Exclude:
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - 'coverage/**/*'
+    - 'log/**/*'
+    - 'bin/*'
+    - '.git/**/*'
+    - '.github/**/*' # Exclude GitHub Actions workflow files from RuboCop analysis
+    - '.devcontainer/**/*' # Exclude DevContainer JSON from RuboCop analysis
+
+# Disable Capybara cops as Capybara is not used in this project
+Capybara:
+  Enabled: false
+
+require:
+  - rubocop-rspec
+  - rubocop-factory_bot
+  - rubocop-rspec_rails
+
+# Style Cops (Examples - can be adjusted)
+Style/Documentation:
+  Enabled: false # Often disabled for libraries initially or handled differently
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+Style/FrozenStringLiteralComment:
+  Enabled: true # Good practice for Ruby 2.3+
+
+# Layout Cops (Examples)
+Layout/LineLength:
+  Max: 120 # A common modern line length
+
+# RSpec Cops
+RSpec:
+  Enabled: true
+RSpec/FilePath:
+  Enabled: true
+RSpec/DescribeClass:
+  Enabled: true

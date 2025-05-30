@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 gemspec
 
-gem 'rails', '8.0.2'
 gem 'actionpack', '~> 8.0', '>= 8.0.2'
 gem 'activesupport', '~> 8.0', '>= 8.0.2'
+gem 'rails', '8.0.2'
 
 group :test do
   gem 'database_cleaner', '~> 2.1'

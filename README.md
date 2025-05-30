@@ -23,6 +23,7 @@ Common development tasks are managed using a `Justfile`. To see available comman
 ```sh
 just list
 ```
+Key commands include `just test` for running tests, `just lint` for checking code style with RuboCop, and `just format` for auto-correcting style issues.
 
 ## Basic usage
 

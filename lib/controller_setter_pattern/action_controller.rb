@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ControllerSetterPattern
   module ActionController
     extend ActiveSupport::Concern
@@ -11,7 +13,8 @@ module ControllerSetterPattern
         options[:model] = model_option.to_s.camelize.constantize if model_option
 
         options[:finder_params] = _normalize_finder_params(callback_options.delete(:finder_params) || [])
-        options[:finder_method] = "find#{options[:finder_params].empty? ? '' : '_by_' + options[:finder_params].join('_and_')}"
+        options[:finder_method] =
+          "find#{options[:finder_params].empty? ? '' : "_by_#{options[:finder_params].join('_and_')}"}"
 
         options[:ancestor] = callback_options.delete(:ancestor)
         options[:scope] = callback_options.delete(:scope)
@@ -32,8 +35,11 @@ module ControllerSetterPattern
         setters.each do |setter|
           before_action callback_options do |controller|
             resource = _get_resource(setter, options[:model], options[:ancestor])
-            resource = _get_resource_by_finder(resource, setter, options) if _is_class_model_or_association_method?(resource)
-            controller.instance_variable_set("@#{setter}".to_sym, resource)
+            if _is_class_model_or_association_method?(resource)
+              resource = _get_resource_by_finder(resource, setter,
+                                                 options)
+            end
+            controller.instance_variable_set(:"@#{setter}", resource)
           end
         end
       end
@@ -54,7 +60,7 @@ module ControllerSetterPattern
         _get_ancestor_resource(setter, model, ancestor)
       else
         # Use provided model or infer from setter name
-        (model && model.respond_to?(:descends_from_active_record?) && model.descends_from_active_record?) ? model : setter.to_s.camelize.constantize
+        model.respond_to?(:descends_from_active_record?) && model.descends_from_active_record? ? model : setter.to_s.camelize.constantize
       end
     end
 
@@ -66,13 +72,15 @@ module ControllerSetterPattern
                             # Infer ancestor model and find by its conventional foreign key in params
                             ancestor_model_class = ancestor.to_s.camelize.constantize
                             # Ensure param_key is permitted if used beyond simple find
-                            param_key = "#{ancestor_model_class.name.underscore}_id".to_sym
+                            param_key = :"#{ancestor_model_class.name.underscore}_id"
                             # This find is generally safe as it's typically an ID.
                             ancestor_model_class.find(params[param_key])
                           end
 
       reflection_method_name = _get_reflection_method(ancestor_resource.class, model || setter)
-      ancestor_resource.public_send(reflection_method_name) if reflection_method_name && ancestor_resource.respond_to?(reflection_method_name)
+      return unless reflection_method_name && ancestor_resource.respond_to?(reflection_method_name)
+
+      ancestor_resource.public_send(reflection_method_name)
     end
 
     def _get_reflection_method(klass, assoc_class)
@@ -84,8 +92,8 @@ module ControllerSetterPattern
       # Check for singular association first, then plural
       reflection = klass.reflect_on_association(singular_name) || klass.reflect_on_association(plural_name)
 
-      reflection.name if reflection # Return the actual name of the association (e.g., :user or :users)
-                                     # instead of reflection.options[:as] which might be for polymorphism
+      reflection&.name # Return the actual name of the association (e.g., :user or :users)
+      # instead of reflection.options[:as] which might be for polymorphism
     end
 
     def _is_class_model_or_association_method?(resource)
@@ -98,7 +106,7 @@ module ControllerSetterPattern
         # If params["#{setter}_id"] is used, it should be explicitly permitted.
         # For now, assuming standard :id or that "#{setter}_id" is a route parameter.
         # A more robust solution would involve controller explicitly permitting these.
-        params["#{setter}_id".to_sym] || params[:id]
+        params[:"#{setter}_id"] || params[:id]
       else
         # Ensure finder_params are strings for permit, then map to fetch values in order.
         string_finder_params = finder_params.map(&:to_s)
