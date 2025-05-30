@@ -1,0 +1,26 @@
+name: Ruby CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.4.2'] # Use the version from .travis.yml
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true # Runs bundle install and caches gems
+    - name: Run RSpec
+      run: bundle exec rspec
+            - name: Upload coverage to Coveralls
+              uses: coverallsapp/github-action@v2
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                # Default LCOV file path is ./coverage/lcov.info which should be generated
+                # by simplecov-lcov with report_with_single_file = true

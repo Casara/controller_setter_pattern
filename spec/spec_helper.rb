@@ -1,5 +1,17 @@
 require 'simplecov'
-require 'rails-controller-testing' # Add this line
+require 'simplecov-lcov'
+
+SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
+SimpleCov.formatters = [
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::LcovFormatter
+]
+SimpleCov.start do
+  add_filter '/spec/' # Do not include spec files in coverage
+  # add_filter '/vendor/' # Example: if there were vendored gems
+end
+
+require 'rails-controller-testing'
 require 'action_controller/railtie'
 require 'action_controller'
 require 'active_model'
@@ -10,11 +22,8 @@ require 'faker'
 require 'factory_bot_rails'
 require 'rspec/rails'
 require 'rails'
-
-# formatters = [SimpleCov::Formatter::HTMLFormatter]
-# SimpleCov.formatters = formatters # Ensure SimpleCov is configured if still used
-SimpleCov.start # Assuming SimpleCov is still desired
-
+# Note: controller_setter_pattern should be required AFTER SimpleCov.start
+# to ensure its loading is tracked for coverage.
 require 'controller_setter_pattern'
 
 module Rails

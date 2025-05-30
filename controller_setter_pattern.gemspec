@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'database_cleaner', '~> 2.1' # TODO: Check compatibility with Rails 8
   s.add_development_dependency 'rake' # TODO: Check compatibility with Rails 8
   s.add_development_dependency 'simplecov', '~> 0.22.0' # Or a more recent compatible version
+  s.add_development_dependency 'simplecov-lcov', '~> 0.8.0'
   s.add_development_dependency 'actionpack', '~> 8.0', '>= 8.0.2'
   s.add_development_dependency 'activesupport', '~> 8.0', '>= 8.0.2'
   s.add_development_dependency 'faker', '~> 3.5', '>= 3.5.1'

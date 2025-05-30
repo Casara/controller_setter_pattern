@@ -1,7 +1,8 @@
 # controller_setter_pattern
 
+[![Ruby CI](https://github.com/Casara/controller_setter_pattern/actions/workflows/ci.yml/badge.svg)](https://github.com/Casara/controller_setter_pattern/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/Casara/controller_setter_pattern/badge.svg?branch=master)](https://coveralls.io/github/Casara/controller_setter_pattern?branch=master)
 [![Gem Version](https://badge.fury.io/rb/controller_setter_pattern.svg)](http://badge.fury.io/rb/controller_setter_pattern)
-<!-- TODO: Add GitHub Actions build status badge -->
 
 Pattern for assign instance variables in controllers for use in views, etc.
 
