@@ -4,23 +4,31 @@ module ControllerSetterPattern
 
     module ClassMethods
       def set(*names)
-        callback_options = names.extract_options!
-        options = {} # Initialize options hash
+        # Extract standard before_action options (e.g., :only, :except, :if, :unless)
+        filter_options = names.last.is_a?(Hash) ? names.last.slice(:only, :except, :if, :unless) : {}
 
-        model_option = callback_options.delete(:model)
-        options[:model] = model_option.to_s.camelize.constantize if model_option
+        # Extract custom options for this gem's setter logic
+        custom_setter_opts_input = names.last.is_a?(Hash) ? names.last.except(*filter_options.keys) : {}
 
-        options[:finder_params] = _normalize_finder_params(callback_options.delete(:finder_params) || [])
-        options[:finder_method] =
-          "find#{options[:finder_params].empty? ? '' : "_by_#{options[:finder_params].join('_and_')}"}"
+        # Determine the actual names for setters (excluding the options hash if present)
+        setter_names = names.last.is_a?(Hash) ? names[0..-2] : names
 
-        options[:ancestor] = callback_options.delete(:ancestor)
-        options[:scope] = callback_options.delete(:scope)
-
-        _insert_setters(names, options, callback_options)
+        options = _prepare_setter_logic_options(custom_setter_opts_input)
+        _insert_setters(setter_names, options, filter_options)
       end
 
       private
+
+      def _prepare_setter_logic_options(custom_opts)
+        options = {}
+        options[:model] = custom_opts[:model].to_s.camelize.constantize if custom_opts[:model]
+        options[:finder_params] = _normalize_finder_params(custom_opts.fetch(:finder_params, []))
+        options[:finder_method] =
+          "find#{options[:finder_params].empty? ? '' : "_by_#{options[:finder_params].join('_and_')}"}"
+        options[:ancestor] = custom_opts[:ancestor]
+        options[:scope] = custom_opts[:scope]
+        options
+      end
 
       def _normalize_finder_params(finder_params)
         finder_params = [finder_params] unless finder_params.is_a?(Array)
@@ -58,7 +66,13 @@ module ControllerSetterPattern
         _get_ancestor_resource(setter, model, ancestor)
       else
         # Use provided model or infer from setter name
-        model.respond_to?(:descends_from_active_record?) && model.descends_from_active_record? ? model : setter.to_s.camelize.constantize
+        is_ar_model = model.respond_to?(:descends_from_active_record?) &&
+                      model.descends_from_active_record?
+        if is_ar_model
+          model
+        else
+          setter.to_s.camelize.constantize
+        end
       end
     end
 

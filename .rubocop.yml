@@ -13,8 +13,8 @@ AllCops:
 
 plugins:
   - rubocop-rspec
-  # Note: rubocop-factory_bot and rubocop-rspec_rails would be added here if they were loading correctly.
-  # The user's provided base only lists rubocop-rspec.
+  - rubocop-factory_bot
+  - rubocop-rspec_rails
 
 # Style Cops
 Style/Documentation:
@@ -41,6 +41,12 @@ Metrics/BlockLength:
   Max: 25
   Exclude:
     - 'spec/**/*'
+
+# FactoryBot Cops
+FactoryBot:
+  Enabled: true
+FactoryBot/AttributeDefinedStatically:
+  Enabled: true
 
 # RSpec Cops
 RSpec/DescribeClass:
