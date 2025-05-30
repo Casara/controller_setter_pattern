@@ -6,12 +6,22 @@
 
 Pattern for assign instance variables in controllers for use in views, etc.
 
-## Instalation
+## Installation
 
 Add `controller_setter_pattern` to your Gemfile:
 
 ```ruby
 gem "controller_setter_pattern"
+```
+
+## Development Environment
+
+This project includes a [VS Code DevContainer](https://code.visualstudio.com/docs/remote/containers) configuration for a consistent development environment.
+Open this project in a DevContainer to automatically get all dependencies and tools set up.
+
+Common development tasks are managed using a `Justfile`. To see available commands, run:
+```sh
+just list
 ```
 
 ## Basic usage

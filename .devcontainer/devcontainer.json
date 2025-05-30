@@ -1,0 +1,32 @@
+{
+  "name": "Ruby Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/ruby:0-3.4-bullseye",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rebornix.Ruby",
+        "Shopify.ruby-lsp",
+        "EditorConfig.EditorConfig",
+        "yzhang.markdown-all-in-one",
+        "redhat.vscode-yaml",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash",
+        "[ruby]": {
+          "editor.defaultFormatter": "Shopify.ruby-lsp",
+          "editor.formatOnSave": true
+        }
+      }
+    }
+  },
+  "features": {
+    // If a standard feature for 'just' becomes available, it could be listed here.
+    // For example: "ghcr.io/devcontainers-contrib/features/just:1": {}
+  },
+  // Using onCreateCommand to ensure 'just' is available when the container is ready.
+  // This command runs inside the container.
+  "onCreateCommand": "sudo apt-get update && sudo apt-get install -y curl && sudo curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin",
+  "postCreateCommand": "bundle install",
+  "remoteUser": "vscode"
+}
