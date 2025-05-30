@@ -81,6 +81,18 @@ module ControllerSetterPattern
 
       private
 
+      # Builds the dynamic finder method name (e.g., 'find' or 'find_by_attribute1_and_attribute2').
+      #
+      # Parameters:
+      #   params_keys (Array<Symbol>): The normalized list of parameter keys to find by.
+      #
+      # Returns:
+      #   String: The finder method name.
+      def build_finder_method(params_keys)
+        # _normalize_finder_params is called before this to get params_keys
+        params_keys.empty? ? 'find' : "find_by_#{params_keys.join('_and_')}"
+      end
+
       # Prepares the internal options hash for the setter logic based on custom options
       # provided to the +set+ method.
       #
@@ -90,14 +102,14 @@ module ControllerSetterPattern
       # Returns:
       #   Hash: A structured options hash for internal use.
       def _prepare_setter_logic_options(custom_opts)
-        options = {}
-        options[:model] = custom_opts[:model].to_s.camelize.constantize if custom_opts[:model]
-        options[:finder_params] = _normalize_finder_params(custom_opts.fetch(:finder_params, []))
-        options[:finder_method] =
-          "find#{options[:finder_params].empty? ? '' : "_by_#{options[:finder_params].join('_and_')}"}"
-        options[:ancestor] = custom_opts[:ancestor]
-        options[:scope] = custom_opts[:scope]
-        options
+        normalized_finder_params = _normalize_finder_params(custom_opts.fetch(:finder_params, []))
+        {
+          model: custom_opts[:model]&.to_s&.camelize&.constantize,
+          finder_params: normalized_finder_params,
+          finder_method: build_finder_method(normalized_finder_params), # Call new helper
+          ancestor: custom_opts[:ancestor],
+          scope: custom_opts[:scope]
+        }
       end
 
       # Normalizes the +finder_params+ option. Ensures it's an array and removes duplicates.

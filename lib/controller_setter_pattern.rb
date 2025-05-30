@@ -7,6 +7,6 @@ module ControllerSetterPattern
   # This ensures that the ActionController extensions are loaded once ActionController::Base
   # itself has been loaded. This is the standard Rails way to extend framework components.
   ActiveSupport.on_load :action_controller do
-    ActionController::Base.include ControllerSetterPattern::ActionController
+    ::ActionController::Base.include ControllerSetterPattern::ActionController
   end
 end
