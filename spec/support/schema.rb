@@ -4,11 +4,13 @@ ActiveRecord::Schema.define do
   create_table :users, force: true do |t|
     t.integer :status, default: 0
     t.string :name
-    t.string :username, unique: true
-    t.string :email, unique: true
+    t.string :username
+    t.string :email
     t.boolean :admin, default: false
     t.timestamps null: false
   end
+  add_index :users, :username, unique: true
+  add_index :users, :email, unique: true
 
   create_table :customers, force: true do |t|
     t.string :name

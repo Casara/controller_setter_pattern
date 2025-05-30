@@ -1,3 +1,5 @@
+require 'simplecov'
+require 'rails-controller-testing' # Add this line
 require 'action_controller/railtie'
 require 'action_controller'
 require 'active_model'
@@ -5,15 +7,13 @@ require 'active_record'
 require 'database_cleaner'
 require 'logger'
 require 'faker'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'rspec/rails'
 require 'rails'
-require 'codeclimate-test-reporter'
 
-formatters = [SimpleCov::Formatter::HTMLFormatter]
-formatters << CodeClimate::TestReporter::Formatter if ENV['CODECLIMATE_REPO_TOKEN']
-SimpleCov.formatters = formatters
-SimpleCov.start
+# formatters = [SimpleCov::Formatter::HTMLFormatter]
+# SimpleCov.formatters = formatters # Ensure SimpleCov is configured if still used
+SimpleCov.start # Assuming SimpleCov is still desired
 
 require 'controller_setter_pattern'
 
@@ -42,15 +42,15 @@ require 'support/models'
 require 'support/controllers'
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
     begin
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
       DatabaseCleaner.start
-      FactoryGirl.find_definitions
-      FactoryGirl.lint
+      FactoryBot.find_definitions
+      FactoryBot.lint
     ensure
       DatabaseCleaner.clean
     end

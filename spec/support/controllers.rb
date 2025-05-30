@@ -16,7 +16,7 @@ class AccountController < ActionController::Base
   set :admin_account, model: User, scope: [:active, :administrator], finder_params: :username, only: :admin_profile
 
   def resend_password
-    render text: "An email containing the new password was sent to your inbox (#{@account.email})."
+    render plain: "An email containing the new password was sent to your inbox (#{@account.email})."
   end
 
   def profile
@@ -39,7 +39,7 @@ class OrdersController < ActionController::Base
   end
 
   def edit
-    render text: 'Edit'
+    render plain: 'Edit'
   end
 
   def order_by_customer_date

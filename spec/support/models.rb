@@ -3,7 +3,7 @@ load File.dirname(__FILE__) + '/schema.rb'
 class User < ActiveRecord::Base
   has_many :social_networks
 
-  enum status: {
+  enum :status, { # Explicitly using positional argument style
     passive: 0,
     pending: 1,
     active: 2,
