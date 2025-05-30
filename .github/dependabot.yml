@@ -1,0 +1,19 @@
+# .github/dependabot.yml
+
+version: 2
+updates:
+  # Enable version updates for Bundler (Ruby gems)
+  - package-ecosystem: "bundler"
+    directory: "/" # Location of Gemfile
+    schedule:
+      interval: "daily" # Check for updates daily
+    commit-message:
+      prefix: "chore(deps)" # Conventional commit prefix for dependency updates
+      include: "scope"
+    reviewers:
+      - "Casara" # Replace with actual GitHub username(s) if known, or remove/comment out
+    assignees:
+      - "Casara" # Replace with actual GitHub username(s) if known, or remove/comment out
+    labels:
+      - "dependencies"
+      - "ruby"

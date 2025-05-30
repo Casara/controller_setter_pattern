@@ -16,9 +16,15 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true # Runs bundle install and caches gems
-    - name: Run RSpec
+
+    - name: Lint with RuboCop
+      run: bundle exec rubocop
+
+    - name: Run RSpec tests
       run: bundle exec rspec
+
     - name: Upload coverage to Coveralls
+      if: success() # Only run if tests succeed
       uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}

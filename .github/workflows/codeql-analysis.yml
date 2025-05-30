@@ -1,0 +1,58 @@
+# .github/workflows/codeql-analysis.yml
+name: "CodeQL Analysis"
+
+on:
+  push:
+    branches: [ master ] # Adjust to your main branch name
+  pull_request:
+    branches: [ master ] # Adjust to your main branch name
+  schedule:
+    - cron: '0 2 * * 1' # Example: Run every Monday at 2 AM UTC
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'ruby' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        # Learn more at https://aka.ms/codeql-docs/language-support
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3 # Or latest version
+      with:
+        languages: ${{ matrix.language }}
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries are run from packs in github/codeql/repo-queries or a config file.
+        # If overriding, ensure 'source-root' is set below, otherwise CodeQL may not find your source code.
+        # queries: ""
+
+    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+    # If this step fails, then you should remove it and run the build manually (see below)
+    # - name: Autobuild
+    #   uses: github/codeql-action/autobuild@v3
+
+    # ℹ️ Command-line programs to run using the OS shell.
+    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+    #   If the Autobuild fails above, remove it and uncomment the following three lines
+    #   and modify them (or add more) to build your code if your project uses a compiled language.
+    # - run: |
+    #     echo "Run, Build Application using script"
+    #     ./my-build-script
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
