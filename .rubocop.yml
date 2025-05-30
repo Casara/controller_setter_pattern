@@ -16,10 +16,6 @@ plugins:
   # Note: rubocop-factory_bot and rubocop-rspec_rails would be added here if they were loading correctly.
   # The user's provided base only lists rubocop-rspec.
 
-# Disable Capybara cops as Capybara is not used in this project
-# RSpec/Capybara: # This department is now part of rubocop-capybara gem
-#  Enabled: false
-
 # Style Cops
 Style/Documentation:
   Enabled: false
@@ -46,16 +42,6 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
 
-# FactoryBot Cops
-# These will cause errors if rubocop-factory_bot is not successfully loaded.
-# The user's provided base includes these, so they are retained here.
-# FactoryBot:
-#  Enabled: true
-# FactoryBot/AttributeDefinedStatically:
-#  Enabled: true
-
 # RSpec Cops
-# RSpec/FilePath: # This was split, keeping it as per user's base. Might need adjustment.
-#  Enabled: true
 RSpec/DescribeClass:
   Enabled: true
