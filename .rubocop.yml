@@ -24,7 +24,7 @@ Style/StringLiterals:
 Style/HashSyntax:
   EnforcedStyle: ruby19
 Style/FrozenStringLiteralComment:
-  Enabled: false # As per subtask requirement
+  Enabled: false
 
 # Layout Cops
 Layout/LineLength:

@@ -12,9 +12,9 @@ group :development, :test do
   gem 'rake'
   gem 'rspec', '~> 3.13', '>= 3.13.1'
   gem 'rspec-rails', '~> 8.0'
-  gem 'rubocop', '~> 1.75' # User specified 1.75, previous was 1.60 in subtask, 1.75.8 was installed. Aligning.
+  gem 'rubocop', '~> 1.75'
   gem 'rubocop-factory_bot', require: false
-  gem 'rubocop-rspec', '~> 3.6' # User specified 3.6, previous was 2.25 in subtask, 2.31.0 was installed. Aligning.
+  gem 'rubocop-rspec', '~> 3.6'
   gem 'rubocop-rspec_rails', require: false
   gem 'simplecov', '~> 0.22.0'
   gem 'simplecov-lcov', '~> 0.8.0'

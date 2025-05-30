@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: ['3.4.2'] # Use the version from .travis.yml
+        ruby-version: ['3.4.2'] # Ensure this matches target Ruby version for the project
 
     steps:
     - uses: actions/checkout@v4

@@ -7,26 +7,22 @@ describe ControllerSetterPattern do
 
   context 'when included in ActionController' do
     describe UsersController, type: :controller do
-      # subject { assigns(:user) } # Removed explicit subject
-
       before { create_list(:user, 3) }
 
       let(:user) { User.first }
 
       it 'finds the instance with params[:id]' do
         get :show, params: { id: user.id }
-        expect(assigns(:user)).to be_a(User) # Use assigns directly
+        expect(assigns(:user)).to be_a(User)
       end
 
       it 'finds the instance with params[:model_id]' do
         get :show, params: { user_id: user.id }
-        expect(assigns(:user)).to be_a(User) # Use assigns directly
+        expect(assigns(:user)).to be_a(User)
       end
     end
 
     describe AccountController, type: :controller do
-      # subject { assigns(:account) } # Removed explicit subject
-
       before { create_list(:user, 3) }
 
       let(:user) { User.first }
@@ -34,12 +30,12 @@ describe ControllerSetterPattern do
       context 'with a model name and a parameter key' do
         it 'finds an instance' do
           get :resend_password, params: { email: user.email }
-          expect(assigns(:account)).to be_a(User) # Use assigns directly
+          expect(assigns(:account)).to be_a(User)
         end
 
         it 'finds an instance with scope' do
           get :profile, params: { username: user.username }
-          expect(assigns(:account)).to be_a(User) # Use assigns directly
+          expect(assigns(:account)).to be_a(User)
         end
 
         it 'finds the instance with scopes' do
