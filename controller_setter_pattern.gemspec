@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 $LOAD_PATH.push File.expand_path('lib', __dir__)
 
 require 'controller_setter_pattern/version'
@@ -27,7 +25,7 @@ Gem::Specification.new do |s|
   s.metadata['rubygems_mfa_required'] = 'true'
 
   s.add_dependency 'rails', '>= 8.0'
-  # Note: Development dependencies were previously here, but are now expected to be managed via Gemfile's group.
+  # NOTE: Development dependencies were previously here, but are now expected to be managed via Gemfile's group.
   # If any are still needed for the gem's own development tasks when used as a standalone project,
   # they should be re-added here (e.g., s.add_development_dependency for rspec, rubocop etc.)
   # Based on the new Gemfile, it seems they are fully managed there.

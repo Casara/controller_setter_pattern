@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 load "#{File.dirname(__FILE__)}/routes.rb"
 
 ActionController::Base.include Rails.application.routes.url_helpers

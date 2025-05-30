@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 module ControllerSetterPattern
   module ActionController
     extend ActiveSupport::Concern

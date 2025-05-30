@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 load "#{File.dirname(__FILE__)}/schema.rb"
 
 class User < ActiveRecord::Base
