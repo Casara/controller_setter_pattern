@@ -70,7 +70,7 @@ module ControllerSetterPattern
                             # This find is generally safe as it's typically an ID.
                             ancestor_model_class.find(params[param_key])
                           end
-      
+
       reflection_method_name = _get_reflection_method(ancestor_resource.class, model || setter)
       ancestor_resource.public_send(reflection_method_name) if reflection_method_name && ancestor_resource.respond_to?(reflection_method_name)
     end
@@ -83,7 +83,7 @@ module ControllerSetterPattern
 
       # Check for singular association first, then plural
       reflection = klass.reflect_on_association(singular_name) || klass.reflect_on_association(plural_name)
-      
+
       reflection.name if reflection # Return the actual name of the association (e.g., :user or :users)
                                      # instead of reflection.options[:as] which might be for polymorphism
     end
@@ -103,7 +103,7 @@ module ControllerSetterPattern
         # Ensure finder_params are strings for permit, then map to fetch values in order.
         string_finder_params = finder_params.map(&:to_s)
         permitted_params = params.permit(*string_finder_params)
-        
+
         # Extract values in the order of original finder_params
         string_finder_params.map { |key| permitted_params[key] }
       end
