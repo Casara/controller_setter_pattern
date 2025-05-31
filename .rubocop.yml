@@ -1,3 +1,8 @@
+plugins:
+  - rubocop-rspec
+  - rubocop-factory_bot
+  - rubocop-rspec_rails
+
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.4
@@ -6,48 +11,19 @@ AllCops:
     - 'tmp/**/*'
     - 'coverage/**/*'
     - 'log/**/*'
-    - 'bin/*'
     - '.git/**/*'
     - '.github/**/*'
     - '.devcontainer/**/*'
 
-plugins:
-  - rubocop-rspec
-  - rubocop-factory_bot
-  - rubocop-rspec_rails
+# Metrics Cops
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+Metrics/MethodLength:
+  Max: 15
 
 # Style Cops
 Style/Documentation:
   Enabled: false
-Style/StringLiterals:
-  EnforcedStyle: single_quotes
-Style/HashSyntax:
-  EnforcedStyle: ruby19
 Style/FrozenStringLiteralComment:
   Enabled: false
-
-# Layout Cops
-Layout/LineLength:
-  Max: 120
-Layout/TrailingWhitespace:
-  Enabled: true
-Layout/EmptyLinesAroundBlockBody:
-  Enabled: true
-
-# Metrics Cops
-Metrics/MethodLength:
-  Max: 15
-Metrics/BlockLength:
-  Max: 25
-  Exclude:
-    - 'spec/**/*'
-
-# FactoryBot Cops
-FactoryBot:
-  Enabled: true
-FactoryBot/AttributeDefinedStatically:
-  Enabled: true
-
-# RSpec Cops
-RSpec/DescribeClass:
-  Enabled: true
