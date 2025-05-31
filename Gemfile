@@ -7,7 +7,7 @@ group :development, :test do
   gem 'activesupport', '~> 8.0', '>= 8.0.2'
 
   gem 'database_cleaner', '~> 2.1'
-  gem 'factory_bot_rails', '~> 6.4', '>= 6.4.4' # NOTE: Reverted to single string for consistency
+  gem 'factory_bot_rails', '~> 6.4', '>= 6.4.4'
   gem 'faker', '~> 3.5', '>= 3.5.1'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'rake'

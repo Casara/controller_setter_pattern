@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'user/(:id)' => 'users#show'
+  get 'users_ping' => 'users#ping' # New route
 
   get 'resend_password/:email' => 'account#resend_password'
   get 'profile/:username' => 'account#profile'

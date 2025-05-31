@@ -27,3 +27,7 @@ Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+# RSpec Cops
+RSpec/NestedGroups:
+  Max: 5

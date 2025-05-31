@@ -1,57 +1,64 @@
-load "#{File.dirname(__FILE__)}/routes.rb"
+# Define a base controller for test purposes that all other test controllers can inherit from.
+class ApplicationTestController < ActionController::Base
+  # Disable CSRF protection for request specs, as it's typically not needed
+  # and can interfere with simple GET/POST requests in a test environment.
+  skip_forgery_protection
+end
 
 ActionController::Base.include Rails.application.routes.url_helpers
+# This might be redundant if routes are used via helpers
 
-class UsersController < ActionController::Base
+class UsersController < ApplicationTestController
   set :user, only: :show
 
   def show
-    render json: @user
+    render plain: 'show_action'
   end
+  # Ping action removed
 end
 
-class AccountController < ActionController::Base
+class AccountController < ApplicationTestController
   set :account, model: User, finder_params: :email, only: :resend_password
   set :account, model: User, scope: :active, finder_params: :username, only: :profile
   set :admin_account, model: User, scope: %i[active administrator], finder_params: :username, only: :admin_profile
 
   def resend_password
-    render plain: "An email containing the new password was sent to your inbox (#{@account.email})."
+    render plain: 'resend_password_action'
   end
 
   def profile
-    render json: @account
+    render plain: 'profile_action'
   end
 
   def admin_profile
-    render json: @admin_account
+    render plain: 'admin_profile_action'
   end
 end
 
-class OrdersController < ActionController::Base
+class OrdersController < ApplicationTestController
   set :customer, only: :show
   set :order, ancestor: :customer, only: :show
   set :other_order, model: Order, ancestor: :customer, only: :edit
   set :order, finder_params: %i[customer_id order_date], only: :order_by_customer_date
 
   def show
-    render json: @order
+    render plain: 'show_action'
   end
 
   def edit
-    render plain: 'Edit'
+    render plain: 'edit_action'
   end
 
   def order_by_customer_date
-    render json: @order
+    render plain: 'order_by_customer_date_action'
   end
 end
 
-class AccountsController < ActionController::Base
+class AccountsController < ApplicationTestController
   set :supplier
   set :account, ancestor: :supplier
 
   def show
-    render json: @account
+    render plain: 'show_action'
   end
 end
