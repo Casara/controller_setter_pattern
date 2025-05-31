@@ -43,7 +43,8 @@ module ControllerSetterPattern
       #
       # * +:scope+ (<tt>Symbol</tt> or <tt>Array<Symbol></tt>): One or more scopes to apply to the model
       #   or association before finding the record.
-      #   Example: <tt>set :user, scope: :active, finder_params: :email</tt> (calls <tt>User.active.find_by_email(...)</tt>)
+      #   Example: <tt>set :user, scope: :active, finder_params: :email</tt>
+      #   (calls <tt>User.active.find_by_email(...)</tt>)
       #   Example: <tt>set :article, scope: [:published, :featured]</tt>
       #
       # * Standard +before_action+ options: Options like +:only+, +:except+, +:if+, +:unless+
@@ -62,7 +63,8 @@ module ControllerSetterPattern
       #
       #   class CommentsController < ApplicationController
       #     set :post # Sets @post = Post.find(params[:post_id])
-      #     set :comment, ancestor: :post, except: [:index, :new, :create] # Sets @comment = @post.comments.find(params[:id])
+      #     set :comment, ancestor: :post, except: [:index, :new, :create]
+      #     # Sets @comment = @post.comments.find(params[:id])
       #   end
       #
       def set(*names)
@@ -103,8 +105,12 @@ module ControllerSetterPattern
       #   Hash: A structured options hash for internal use.
       def _prepare_setter_logic_options(custom_opts)
         normalized_finder_params = _normalize_finder_params(custom_opts.fetch(:finder_params, []))
+
+        model_class = nil
+        model_class = custom_opts[:model].to_s.camelize.constantize if custom_opts[:model]
+
         {
-          model: custom_opts[:model]&.to_s&.camelize&.constantize,
+          model: model_class,
           finder_params: normalized_finder_params,
           finder_method: build_finder_method(normalized_finder_params), # Call new helper
           ancestor: custom_opts[:ancestor],
