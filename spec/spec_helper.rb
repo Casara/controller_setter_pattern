@@ -49,6 +49,7 @@ ActiveRecord::Base.logger = Logger.new(File.join(File.dirname(__FILE__), '../log
 # migrate the database
 require 'support/models'
 require 'support/controllers'
+require_relative 'support/routes' # Explicitly require routes
 
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
